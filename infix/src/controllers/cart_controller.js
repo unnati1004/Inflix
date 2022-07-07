@@ -13,6 +13,8 @@ const userCart =[
         {code: 100, unitPrice: 20.00, name: "chips"},
         {code: 103, unitPrice: 10.00, name: "ice-cream"}
         ];
+
+          
 // post cart item
 router.get("/order/:id",async(req,res)=>{
     try {
@@ -40,26 +42,47 @@ router.get("/order/orderId/summarize",async(req,res)=>{
     }
 })
 
-router.post("/order/:orderid",async(req,res)=>{
+router.post("/order/:id",async(req,res)=>{
     try {
-        let id = req.params.orderid;
-        console.log(id);
-        itemMaster.filter((e)=>{
-            if(e.code == id)
-            {
-               
-                userCart.push({
-                    "code":e.code,
-                    "unitPrice":e.unitPrice,
-                    "qty": res,
-                    "totalAmt":qty*unitPrice
-                })
+        let data = {}
+        let id = req.params.id
+        let qty = req.body.qty
+        itemMaster.filter(e => {
+            if(e.code==id){
+                data.qty = qty
+                data.code = e.code
+                data.unitPrice = e.unitPrice
+                data.totalAmt = e.unitPrice*qty
+                let final = [...cart,data]
+                return res.send(final)
             }
         })
-        res.status(201).send("Items not found");
-    } catch (err) {
-        return res.status(500).send(err.message)
+        res.send("Item Not Found")
+    } catch (error) {
+        console.log(error.message);
     }
 })
 
+rout.get("/userCart/order/:id/summarize",async(req,res)=>{
+    try {
+        let final = [];
+        for(let i =0;i<userCart.length;i++){
+            userCart.filter(e => {
+                if(e.code==cart[0].code){
+                    let data = e
+                    data.qty+=cart[0].qty
+                    data.totalAmt+=cart[0].totalAmt
+                    final.push(data)
+                }
+                else{
+                    final.push(e);
+                }
+            })
+        }
+        res.send(final)
+    } catch (error) {
+        console.log('error', error.message);
+        
+    }
+})
 module.exports=router
