@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
 
 const userCart =[
     {code: 100, qty: 3, unitPrice: 20.00, totalAmt: 60.00},
