@@ -47,8 +47,12 @@ router.post("/order/:orderid",async(req,res)=>{
         itemMaster.filter((e)=>{
             if(e.code == id)
             {
+               
                 userCart.push({
-                    
+                    "code":e.code,
+                    "unitPrice":e.unitPrice,
+                    "qty": res,
+                    "totalAmt":qty*unitPrice
                 })
             }
         })
